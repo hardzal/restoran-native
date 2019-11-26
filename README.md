@@ -1,25 +1,13 @@
 # README
 USER LOGIN
+
 memberbaru
 123354
 
 member_setia
 456354
-
-# TODO
-- USER CRUD
-- USER LEVEL CRUD
-- DESK CRUD
-- LOGIN 
-- REGISTER
-- SHOW PRODUCT 
-- SHOW PRODUCT BY CATEGORY
-- SEARCH
-- PAGINATION
-- ORDER CRUD
-- PAYMENT CRUD
-- 
-### Pages
+  
+### Fitur
 - [x] Login
 - [x] Register
 - [ ] Administrator Access
@@ -54,9 +42,10 @@ member_setia
   - [ ] User Level Update
   - [ ] User Level Delete
   - [ ] User Level Search
-  - Report?
-  - Export?
-  - Import?
+  - [ ] Report?
+  - [ ] Export?
+  - [ ] Import?
+  
 - User Access 
   - [ ] User Order 
   - [ ] User Pay
