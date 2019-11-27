@@ -1,0 +1,21 @@
+.product-card {
+    overflow: hidden;
+}
+
+.product-card img {
+    max-height: 300px;
+    min-height: 300px;
+}
+
+.modal-img {
+    overflow: hidden;
+}
+
+img.food-img {
+    width: 200px;
+    height: auto;
+}
+
+.modal-dialog {
+    max-width: 800px;
+}

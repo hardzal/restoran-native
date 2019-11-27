@@ -1,4 +1,5 @@
 <?php
+
 use \app\models\Product as Product;
 use \app\models\Category as Category;
 
@@ -63,115 +64,119 @@ $category = new Category($db->getConnection());
 
     <!-- Three columns of text below the carousel -->
     <div class="album py-5 bg-light">
-    <div class="container">
-    <div class='row'>
-      <div class='col-md-4 mb-4'>
-      <form method='GET' action=''>
-        <p>Show by Category</p>
-        <select name='categories'>
-          <option value=''>All</option>
+      <div class="container">
+        <div class='row'>
+          <div class='col-lg-12 mb-4'>
+            <form method='GET' action=''>
+              <div class="form-group row">
+                <label class="col-form-label col-sm-2">Show by Category</label>
+
+                <select name='categories' class="form-control col-sm-7 mr-3">
+                  <option value=''>All</option>
+                  <?php
+                  $result = $category->selectAll();
+                  foreach ($result as $key => $value) {
+                    if (isset($_GET['categories'])) {
+                      if ($_GET['categories'] == $value['id']) {
+                        $selected = "selected";
+                      } else {
+                        $selected = "";
+                      }
+                    }
+                    echo "<option value='" . $value['id'] . "' {$selected}>" . $value['name'] . "</option>";
+                  }
+                  ?>
+                </select>
+
+                <input class="col-sm-2 btn btn-primary" type='submit' value="Tampilkan" style="cursor:pointer;" />
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
           <?php
-            $result = $category->selectAll();
-            foreach($result as $key => $value) {
-              if(isset($_GET['categories'])) {
-                if($_GET['categories'] == $value['id']) {
-                  $selected = "selected";
-                } else {
-                  $selected = "";
-                }
-              }
-              echo "<option value='".$value['id']."' {$selected}>".$value['name']."</option>";
-            }
+          if (!empty($_GET['categories'])) {
+            $id = filter_input(INPUT_GET, 'categories', FILTER_SANITIZE_NUMBER_INT);
+            $result = $product->showByCategory($id);
+          } else if (isset($_GET['search'])) {
+            $query = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
+            $result = $product->search($query);
+          } else {
+            $result = $product->selectAll();
+          }
+          foreach ($result as $key => $row) {
+            ?>
+            <div class="col-md-4">
+              <div class="card mb-4 shadow-sm product-card">
+                <?php echo "<img src='./public/assets/images/" . $row['img_product'] . "' alt='" . $row['name'] . "' title='" . $row['name'] . "' style='width:100%;'/>"; ?>
+                <div class="card-body">
+                  <h3><a href='#'><?= $row['name']; ?></a></h3>
+                  <p class="card-text"><?php echo strlen($row['description']) > 40 ? substr($row['description'], 0, 40) . ".." : $row['description']; ?></p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <a data-id="<?= $row['id']; ?>" data-link="<?= BASEFILE; ?>" data-toggle="modal" data-target="#buyModal" name='buy_button' class="btn btn-lg btn-primary buy-product" style='cursor:pointer;color: white;'>View</a>
+                    </div>
+                    <small class="text-success">Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <?php
+          }
           ?>
-        </select>
-        <input type='submit' name='submit_categories'/>
-      </form>
+        </div>
       </div>
     </div>
-   
-    <div class="row">
-      <?php
-        if(isset($_GET['submit_categories']) && !empty($_GET['categories'])) {
-          $id = filter_input(INPUT_GET, 'categories', FILTER_SANITIZE_NUMBER_INT);
-          $result = $product->showByCategory($id);
-        } else if(isset($_GET['search'])) {
-          $query = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
-          $result = $product->search($query);
-        } else {
-          $result = $product->selectAll();
-        }
-        foreach($result as $key => $row) {
-        ?>
-          <div class="col-md-4">
-            <div class="card mb-4 shadow-sm">
-              <?php echo "<img src='./public/assets/images/". $row['img_product']. "' alt='".$row['name']."' title='".$row['name']."' style='width:100%;'/>";?>
-              <div class="card-body">
-                <h3><a href='#'><?=$row['name'];?></a></h3>
-                <p class="card-text"><?php echo strlen($row['description']) > 40 ? substr($row['description'], 0, 40).".." : $row['description'];?></p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <a href="./?show=product&id=<?=$row['id'];?>" class="btn btn-sm btn-outline-secondary" style='cursor:pointer;'>View</a>
-                    <form method="POST" action="">
-                      <input type='hidden' name='product_id' value="<?=$row['id'];?>"/>
-                      <button type="button" name='buy_button' class="btn btn-sm btn-outline-secondary" style='cursor:pointer;'>Buy</button>
-                    </form>
+
+  </div><!-- /.container -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="buyModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="buyModalLabel">Order Food <span class='food-name'></span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST" action="<?= BASEFILE ?>?show=cart&pages=add">
+          <div class="modal-body">
+            <div class="card mb-3" style="width: 100%;">
+              <div class="row no-gutters">
+                <div class="col-md-4 modal-img">
+                  <img src="#" class="card-img food-img" alt="#" />
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title food-title">Card title</h5>
+                    <p class="card-text food-desc">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <ul class="list-group">
+                      <li class="list-group-item food-price"></li>
+                      <li class="list-group-item food-category"></li>
+                      <li class="list-group-item food-status"></li>
+                    </ul>
+                    <div class="form-group">
+                      <label for="food-num" class="col-form-label">Order</label>
+                      <input type="number" name="food-nnum" id="food-num" min=0 class="form-control" />
+                      <label for="food-price-total" class="col-form-label">Total Price</label>
+                      <input type='number' name='food-price-total' class='form-control food-price-total' min=0 readonly />
+                    </div>
                   </div>
-                  <small class="text-success">Rp <?php echo number_format($row['price'], 0, ',', '.');?></small>
                 </div>
               </div>
             </div>
           </div>
-        <?php
-            }
-          ?>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="cursor:pointer;">Close</button>
+            <button type="button" class="btn btn-primary" style="cursor:pointer;">Add to cart</button>
+          </div>
+        </form>
       </div>
     </div>
-  </div>    
+  </div>
 
-    <!-- START THE FEATURETTES -->
-
-    <!-- <hr class="featurette-divider"> -->
-
-    <!-- <div class="row featurette">
-      <div class="col-md-7">
-        <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It’ll blow your mind.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-      </div>
-      <div class="col-md-5">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 500x500"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="row featurette">
-      <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading">Oh yeah, it’s that good. <span class="text-muted">See for yourself.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-      </div>
-      <div class="col-md-5 order-md-1">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 500x500"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="row featurette">
-      <div class="col-md-7">
-        <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-      </div>
-      <div class="col-md-5">
-        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 500x500"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
-      </div>
-    </div> -->
-
-    <!-- <hr class="featurette-divider"> -->
-
-    <!-- /END THE FEATURETTES -->
-
-  </div><!-- /.container -->
-
-<?php
-    require_once __DIR__. '/layouts/footer.php';
-?>
+  <?php
+  require_once __DIR__ . '/layouts/footer.php';
+  ?>

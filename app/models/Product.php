@@ -5,8 +5,9 @@ namespace app\models;
 use \app\config\Utilities as Utilities;
 use PDO;
 
-class Product {
-    
+class Product
+{
+
     private $connect;
     public static $message = '';
 
@@ -26,14 +27,13 @@ class Product {
         $this->connect = $database;
     }
 
-    public function filterString($variabel) {
+    public function filterString($variabel)
+    {
         return htmlspecialchars(strip_tags($variabel));
     }
 
-    public function selectAll() {
-        /*
-            nama, harga, stock, image, category
-        */
+    public function selectAll()
+    {
         $query = "SELECT p.id, p.name, p.price, p.stock, p.status_product, c.name AS \"category_name\", p.img_product, p.description
                     FROM products p INNER JOIN categories c ON p.category_id=c.id WHERE p.status_product = 1
                     ORDER BY p.created_at DESC
@@ -41,38 +41,40 @@ class Product {
 
         $statement = $this->connect->prepare($query);
 
-        if($statement->execute()) {
+        if ($statement->execute()) {
             return $statement->fetchAll(\PDO::FETCH_ASSOC);
-        } 
+        }
 
         return false;
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $query = "SELECT p.name, p.category_id, p.price, p.stock, p.status_product, c.name AS \"category_name\", p.img_product, p.description
                 FROM products p INNER JOIN categories c ON p.category_id=c.id
                 WHERE p.id= :id
                 ";
 
         $statement = $this->connect->prepare($query);
-        
+
         $id = $this->filterString($id);
 
         $statement->bindParam(':id', $id);
-        
-        if($statement->execute()) {
+
+        if ($statement->execute()) {
             return $statement->fetch(\PDO::FETCH_ASSOC);
-        } 
+        }
 
         return false;
     }
 
-    public function create() {
+    public function create()
+    {
         $query = "INSERT INTO products
                     VALUES('', ?, ?, ?, ?, ?, ?, ?, now(), '')";
 
         $stmt = $this->connect->prepare($query);
-        
+
         $category_id = filter_var($this->filterString($_POST['category_id']), FILTER_SANITIZE_NUMBER_INT);
         $name = filter_var($this->filterString($_POST['title']), FILTER_SANITIZE_STRING);
         $price = filter_var($this->filterString($_POST['price']), FILTER_SANITIZE_NUMBER_INT);
@@ -81,7 +83,7 @@ class Product {
         $status_produk = filter_var($this->filterString($_POST['status_product']), FILTER_SANITIZE_NUMBER_INT);
 
         $utilities = new Utilities();
-        if(isset($_FILES['img'])) {
+        if (isset($_FILES['img'])) {
             $utilities->upload($_FILES['img']);
             $img_product = $utilities->getFileName();
         } else {
@@ -96,15 +98,16 @@ class Product {
         $stmt->bindParam(7, $description);
         $stmt->bindParam(6, $status_produk);
 
-        if($stmt->execute()) {
+        if ($stmt->execute()) {
             return true;
-        } 
+        }
 
         return false;
     }
 
-    public function update($id) {
-        if(isset($_FILES['img']) && !empty($_FILES['img'])) {
+    public function update($id)
+    {
+        if (isset($_FILES['img']) && !empty($_FILES['img'])) {
             $query = "UPDATE products 
                     SET
                         name = :name,
@@ -120,7 +123,7 @@ class Product {
 
             $utilities = new Utilities();
             $utilities->upload($_FILES['img']);
-            $img_product = $utilities->getFileName();            
+            $img_product = $utilities->getFileName();
         } else {
             $query = "UPDATE products 
                     SET
@@ -136,7 +139,7 @@ class Product {
         }
 
         $statement = $this->connect->prepare($query);
-        
+
         $id = $this->filterString($id);
         $statement = $this->connect->prepare($query);
 
@@ -153,36 +156,38 @@ class Product {
         $statement->bindParam(':name', $name);
         $statement->bindParam(':price', $price);
         $statement->bindParam(':stock', $stock);
-        
-        if(isset($_FILES['img'])) {
+
+        if (isset($_FILES['img'])) {
             $statement->bindParam(':img_product', $img_product);
         }
         $statement->bindParam(':description', $description);
         $statement->bindParam(':status_product', $status_product);
 
-        if($statement->execute()) {
+        if ($statement->execute()) {
             return true;
-        } 
+        }
 
         return false;
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $query = "DELETE FROM products WHERE id= :id";
 
         $statement = $this->connect->prepare($query);
-        
+
         $id = $this->filterString($id);
 
         $statement->bindParam(':id', $id);
-        
-        if($statement->execute()) {
+
+        if ($statement->execute()) {
             return true;
-        } 
+        }
         return false;
     }
 
-    public function search($column) {
+    public function search($column)
+    {
         // $value = $this->filterString($_POST['search']);
         $value = $column;
         $query = "SELECT p.name, p.price, p.stock, p.status_product, c.name AS \"category_name\", p.img_product, p.description
@@ -190,16 +195,17 @@ class Product {
 
         $statement = $this->connect->prepare($query);
 
-        if($statement->execute()) {
-            if($statement->rowCount() > 0) {
-                return $statement->fetchAll(\PDO::FETCH_ASSOC); 
-            } 
+        if ($statement->execute()) {
+            if ($statement->rowCount() > 0) {
+                return $statement->fetchAll(\PDO::FETCH_ASSOC);
+            }
         }
 
         return false;
     }
 
-    public function showByCategory($id) {
+    public function showByCategory($id)
+    {
         $query = "SELECT p.id, p.name, p.price, p.stock, p.status_product, c.name AS \"category_name\", p.img_product, p.description
         FROM products p INNER JOIN categories c ON p.category_id=c.id WHERE p.status_product = 1 AND p.category_id = :id ORDER BY p.created_at DESC
     ";
@@ -208,9 +214,9 @@ class Product {
 
         $statement->bindParam(':id', $id);
 
-        if($statement->execute()) {
+        if ($statement->execute()) {
             return $statement->fetchAll(\PDO::FETCH_ASSOC);
-        } 
+        }
 
         return false;
     }
