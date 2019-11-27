@@ -46,8 +46,14 @@ $auth = new Authentication($db->getConnection());
             <?php
             }
             ?>
+            <?php
+            $cart_total = 0;
+            if (isset($_SESSION['cart'])) {
+              $cart_total = sizeof($_SESSION['cart']);
+            }
+            ?>
             <li class='nav-item'>
-              <a class='nav-link' href='?show=cart'>Cart <span class='bg-white' style='color:black; padding: 5px;'>0</span></a>
+              <a class='nav-link' href='?show=cart'>Cart <span class='bg-white' style='color:black; padding: 5px;'><?= $cart_total; ?></span></a>
             </li>
           </ul>
           <form method='GET' action='' class="form-inline mt-2 mt-md-0">

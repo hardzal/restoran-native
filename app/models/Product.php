@@ -35,8 +35,8 @@ class Product
     public function selectAll()
     {
         $query = "SELECT p.id, p.name, p.price, p.stock, p.status_product, c.name AS \"category_name\", p.img_product, p.description
-                    FROM products p INNER JOIN categories c ON p.category_id=c.id WHERE p.status_product = 1
-                    ORDER BY p.created_at DESC
+                    FROM products p INNER JOIN categories c ON p.category_id=c.id
+                    ORDER BY p.created_at and p.status_product DESC
                 ";
 
         $statement = $this->connect->prepare($query);

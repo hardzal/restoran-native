@@ -112,7 +112,7 @@ class Authentication extends Database {
             unset($_SESSION['user_id']);
             unset($_SESSION['roles_id']);
             unset($_SESSION['username']);
-
+            unset($_SESSION['cart']);
             return true;
         }
     }
@@ -128,5 +128,3 @@ class Authentication extends Database {
         header('Location: ./?show=index');
     }
 }
-
-?>

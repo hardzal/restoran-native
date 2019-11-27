@@ -5,61 +5,9 @@ use \app\models\Category as Category;
 
 $product = new Product($db->getConnection());
 $category = new Category($db->getConnection());
+var_dump($_SESSION);
 ?>
 <main role="main">
-  <!-- <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
-        <div class="container">
-          <div class="carousel-caption text-left">
-            <h1>Example headline.</h1>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
-        <div class="container">
-          <div class="carousel-caption">
-            <h1>Another example headline.</h1>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
-        <div class="container">
-          <div class="carousel-caption text-right">
-            <h1>One more for good measure.</h1>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <p><a class="btn btn-lg btn-primary" href="#" role="button">Browse gallery</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div> -->
-
-
-  <!-- Marketing messaging and featurettes
-  ================================================== -->
-  <!-- Wrap the rest of the page in another container to center all the content. -->
-
   <div class="container marketing mt-5">
 
     <!-- Three columns of text below the carousel -->
@@ -141,7 +89,7 @@ $category = new Category($db->getConnection());
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form method="POST" action="<?= BASEFILE ?>?show=cart&pages=add">
+        <form method="POST" action="<?= BASEFILE; ?>?show=api&pages=order&action=add">
           <div class="modal-body">
             <div class="card mb-3" style="width: 100%;">
               <div class="row no-gutters">
@@ -159,9 +107,11 @@ $category = new Category($db->getConnection());
                     </ul>
                     <div class="form-group">
                       <label for="food-num" class="col-form-label">Order</label>
-                      <input type="number" name="food-nnum" id="food-num" min=0 class="form-control" />
+                      <input type="number" name="food-num" id="food-num" min=0 class="form-control" />
                       <label for="food-price-total" class="col-form-label">Total Price</label>
                       <input type='number' name='food-price-total' class='form-control food-price-total' min=0 readonly />
+                      <label for="food-description" class="col-form-label">Notes</label>
+                      <textarea name='food-description' class='form-control food-description'></textarea>
                     </div>
                   </div>
                 </div>
@@ -169,8 +119,11 @@ $category = new Category($db->getConnection());
             </div>
           </div>
           <div class="modal-footer">
+            <?php if (isset($_SESSION['user_id'])) : ?>
+              <input type="hidden" name="food-id" value="" class="food-id" />
+              <button name="addCart" type="submit" class="btn btn-primary addCart" style="cursor:pointer;">Add to cart</button>
+            <?php endif; ?>
             <button type="button" class="btn btn-secondary" data-dismiss="modal" style="cursor:pointer;">Close</button>
-            <button type="button" class="btn btn-primary" style="cursor:pointer;">Add to cart</button>
           </div>
         </form>
       </div>

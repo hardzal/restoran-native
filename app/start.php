@@ -12,6 +12,10 @@ if (!empty($show)) {
 
         if (!isset($_SESSION['user_id']) && empty($_SESSION['user_id'])) header('Location: ./?show=index');
 
+        if (!file_exists(__DIR__ . '/../app/views/' . htmlspecialchars(strip_tags($show)) . '/' . htmlspecialchars(strip_tags($_GET['pages'])) . '.php')) {
+            header("Location: ./?show=index");
+        }
+
         require_once __DIR__ . '/views/layouts/dashboard/head.php';
         require_once __DIR__ . '/views/layouts/dashboard/nav.php';
         require_once __DIR__ . '/../app/views/' . htmlspecialchars(strip_tags($show)) . '/' . htmlspecialchars(strip_tags($_GET['pages'])) . '.php';

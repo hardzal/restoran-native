@@ -26,39 +26,47 @@ $i = 1;
         }
       }
       ?>
-      <table class='table table-hover table-bordered'>
-        <tr>
-          <th>No</th>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Stock</th>
-          <th>Status Produk</th>
-          <th>Category</th>
-          <th>Image</th>
-          <th colspan='2'>Action</th>
-        </tr>
-        <?php
-        $result = $product->selectAll();
-        foreach ($result as $key => $row) {
-          $status = $row['status_product'] == 1 ? 'DONE' : 'NOT YET';
-          $img = $row['img_product'] == NULL ? "food_default.png" : $row['img_product'];
-          ?>
-          <tr>
-            <td><?= $i; ?></td>
-            <td><?= $row['name']; ?></td>
-            <td><?= $row['price']; ?></td>
-            <td><?= $row['stock']; ?></td>
-            <td><?= $status; ?></td>
-            <td><?= $row['category_name']; ?></td>
-            <td><img src='./public/assets/images/<?= $img; ?>' alt='<?= $row['name']; ?>' title='<?= $row['name']; ?>' style='width:100px' /></td>
-            <td><a href='./?show=admin&pages=product-show&id=<?= $row["id"]; ?>' class='btn btn-success mr-2'><span data-feather='eye'></span></a><a href='?show=admin&pages=product-edit&id=<?= $row["id"]; ?>' class='btn btn-info ml-1 mr-2'><span data-feather='edit'></span></a>
-              <a href='?show=admin&pages=product-delete&id=<?= $row["id"]; ?>' class='btn btn-danger' onclick='return confirm("Apakah kamu yakin ingin menghapus ini?")'><span data-feather='trash-2'></span></a></td>
-          </tr>
-        <?php
-          $i = $i + 1;
-        }
+      <?php
+      $result = $product->selectAll();
+      if (sizeof($result) > 0) :
         ?>
-      </table>
+        <table class='table table-hover table-bordered'>
+          <tr>
+            <th>No</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Status Produk</th>
+            <th>Category</th>
+            <th>Image</th>
+            <th colspan='2'>Action</th>
+          </tr>
+          <?php
+            foreach ($result as $key => $row) {
+              $status = $row['status_product'] == 1 ? 'DONE' : 'NOT YET';
+              $img = $row['img_product'] == NULL ? "food_default.png" : $row['img_product'];
+              ?>
+            <tr>
+              <td><?= $i; ?></td>
+              <td><?= $row['name']; ?></td>
+              <td><?= $row['price']; ?></td>
+              <td><?= $row['stock']; ?></td>
+              <td><?= $status; ?></td>
+              <td><?= $row['category_name']; ?></td>
+              <td><img src='./public/assets/images/<?= $img; ?>' alt='<?= $row['name']; ?>' title='<?= $row['name']; ?>' style='width:100px' /></td>
+              <td><a href='./?show=admin&pages=product-show&id=<?= $row["id"]; ?>' class='btn btn-success mr-2'><span data-feather='eye'></span></a><a href='?show=admin&pages=product-edit&id=<?= $row["id"]; ?>' class='btn btn-info ml-1 mr-2'><span data-feather='edit'></span></a>
+                <a href='?show=admin&pages=product-delete&id=<?= $row["id"]; ?>' class='btn btn-danger' onclick='return confirm("Apakah kamu yakin ingin menghapus ini?")'><span data-feather='trash-2'></span></a></td>
+            </tr>
+          <?php
+              $i = $i + 1;
+            }
+            ?>
+        </table>
+      <?php
+      else :
+        echo "<p>Belum ada produk</p>";
+      endif;
+      ?>
     </main>
   </div>
 </div>

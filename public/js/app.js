@@ -3,6 +3,7 @@ $(function () {
     $('.buy-product').on('click', function () {
         const id = $(this).data("id");
         const link = $(this).data('link');
+
         $.ajax({
             url: link + '?show=api&pages=product',
             data: {
@@ -17,7 +18,8 @@ $(function () {
                 $('.food-desc').html(data.description);
                 $('.food-category').html("<small class='badge badge-primary'>" + data.category_name + "</small>");
                 $('.food-price').html("<small class='badge badge-success'>Rp . " + new Intl.NumberFormat(['ban', 'id']).format(data.price) + "</small>");
-                if (data.status) {
+                $('.food-id').val(id);
+                if (data.status_product) {
                     $('.food-status').html("<small class='badge badge-success'>Available</small>");
                 } else {
                     $('.food-status').html("<small class='badge badge-danger'>Not Available</small>");
@@ -31,5 +33,4 @@ $(function () {
         $('#food-num').val(0);
         $('.food-price-total').val(0);
     });
-
 });

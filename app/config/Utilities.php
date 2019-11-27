@@ -83,4 +83,9 @@ class Utilities
 
     public function importing()
     { }
+
+    public function setNumberFormat($number)
+    {
+        return \number_format($number, 2, ',', '.');
+    }
 }
