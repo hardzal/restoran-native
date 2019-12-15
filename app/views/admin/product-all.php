@@ -54,7 +54,7 @@ $i = 1;
               <td><?= $status; ?></td>
               <td><?= $row['category_name']; ?></td>
               <td><img src='./public/assets/images/<?= $img; ?>' alt='<?= $row['name']; ?>' title='<?= $row['name']; ?>' style='width:100px' /></td>
-              <td><a href='./?show=admin&pages=product-show&id=<?= $row["id"]; ?>' class='btn btn-success mr-2'><span data-feather='eye'></span></a><a href='?show=admin&pages=product-edit&id=<?= $row["id"]; ?>' class='btn btn-info ml-1 mr-2'><span data-feather='edit'></span></a>
+              <td><a href='?show=admin&pages=product-edit&id=<?= $row["id"]; ?>' class='btn btn-info ml-1 mr-2'><span data-feather='edit'></span></a>
                 <a href='?show=admin&pages=product-delete&id=<?= $row["id"]; ?>' class='btn btn-danger' onclick='return confirm("Apakah kamu yakin ingin menghapus ini?")'><span data-feather='trash-2'></span></a></td>
             </tr>
           <?php

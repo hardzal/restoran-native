@@ -26,40 +26,50 @@ foreach ($carts as $cart) {
     <div class='container mt-5 mb-5'>
         <h2 style='margin-top:90px !important;'>List Order</h2>
         <hr />
-        <div class="row">
-            <?php foreach ($carts as $cart) :
-                $total += $cart['quantity'] * $cart['product_detail']['price']; ?>
-                <div class="col-md-4">
-                    <div class="card" style="width: 18rem;">
-                        <img src="<?= BASEFILE . './public/assets/images/' . $cart['product_detail']['img_product']; ?>" class="card-img-top" alt="<?= $cart['product_detail']['name']; ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= $cart['product_detail']['name']; ?></h5>
-                            <p class="card-text"><?= $cart['product_detail']['description']; ?></p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Price : Rp @<?= $util->setNumberFormat($cart['product_detail']['price']); ?></li>
-                            <li class="list-group-item">Quantity : <?= $cart['quantity']; ?></li>
-                            <li class="list-group-item">Total : Rp<?= $util->setNumberFormat($cart['quantity'] * $cart['product_detail']['price']); ?></li>
-                        </ul>
-                        <div class="card-body">
-                            <a href="#" class="card-link"><button class="btn btn-danger" type="button" style="cursor:pointer;">Delete</button></a>
+        <?php if ($carts) : ?>
+            <div class="row">
+                <?php foreach ($carts as $cart) :
+                        $total += $cart['quantity'] * $cart['product_detail']['price']; ?>
+                    <div class="col-md-4">
+                        <div class="card" style="width: 18rem;">
+                            <img src="<?= BASEFILE . './public/assets/images/' . $cart['product_detail']['img_product']; ?>" class="card-img-top" alt="<?= $cart['product_detail']['name']; ?>">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= $cart['product_detail']['name']; ?></h5>
+                                <p class="card-text"><?= $cart['product_detail']['description']; ?></p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Price : Rp @<?= $util->setNumberFormat($cart['product_detail']['price']); ?></li>
+                                <li class="list-group-item">Quantity : <?= $cart['quantity']; ?></li>
+                                <li class="list-group-item">Total : Rp<?= $util->setNumberFormat($cart['quantity'] * $cart['product_detail']['price']); ?></li>
+                            </ul>
+                            <div class="card-body">
+                                <a href="#" class="card-link"><button class="btn btn-danger" class="deleteCart" data-link="<?= BASEFILE; ?>" data-id="<?= $cart['product_id']; ?>" type="button" style="cursor:pointer;">Delete</button></a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
+                <?php endforeach; ?>
+            </div>
 
-        <div class='row mt-5'>
-            <div class='col-12'>
-                <div class="card">
-                    <div class="card-header">
-                        Total Pemesanan : <strong>Rp <?= $util->setNumberFormat($total); ?></strong>
-                    </div>
-                    <div class="card-body">
-                        <p>Silahkan bayar melalui kasir atau melalui dompet digital</p>
+            <div class='row mt-5'>
+                <div class='col-12'>
+                    <div class="card">
+                        <div class="card-header">
+                            Total Pemesanan : <strong>Rp <?= $util->setNumberFormat($total); ?></strong>
+                        </div>
+                        <div class="card-body">
+                            <p>Silahkan bayar melalui kasir atau melalui dompet digital</p>
+                            <p class='card-img'>
+                                <?php // QRcode::png('java-restaurant', 'image.png', $_SESSION['user_id']); 
+                                    ?>
+                                <!-- <img src='image.png' /> -->
+                                <img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=http%3A%2F%2Fwww.google.com%2F&choe=UTF-8" title="Link to Google.com" />
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        <?php else : ?>
+            <p>Belum ada pesanan</p>
+        <?php endif; ?>
     </div>
 </main>

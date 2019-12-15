@@ -28,9 +28,28 @@ $(function () {
                     let num = parseInt($('#food-num').val());
                     $('.food-price-total').val(data.price * num);
                 });
+                $('.food-status-stock').val(data.status_product);
             }
         });
         $('#food-num').val(0);
         $('.food-price-total').val(0);
+    });
+
+    $('.deleteCart').on('click', function () {
+        const product_id = $(this).data('id');
+        const link = $(this).data('link');
+
+        $.ajax({
+            url: link + '?show=api&pages=order&action=delete',
+            data: {
+                id: product_id,
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
     });
 });

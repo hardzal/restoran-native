@@ -13,12 +13,6 @@
           if ($_SESSION['roles_id'] != 6) {
             ?>
             <li class="nav-item">
-              <a class="nav-link" href="<?= './?show=admin&pages=order-all' ?>">
-                <span data-feather="file"></span>
-                Orders
-              </a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="<?= './?show=admin&pages=product-all' ?>">
                 <span data-feather="shopping-cart"></span>
                 Products
@@ -31,21 +25,27 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./?show=admin&pages=desk-all">
-                <span data-feather="tablet"></span>
-                Desks
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?= './?show=admin&pages=user-all' ?>">
-                <span data-feather="users"></span>
-                Users
+              <a class="nav-link" href="<?= './?show=admin&pages=order-all' ?>">
+                <span data-feather="file"></span>
+                Orders
               </a>
             </li>
             <li class='nav-item'>
               <a class='nav-link' href='./?show=admin&pages=payment-all'>
                 <span data-feather="credit-card"></span>
                 Payments
+              </a>
+            </li>
+            <!--<li class="nav-item">
+              <a class="nav-link" href="./?show=admin&pages=desk-all">
+                <span data-feather="tablet"></span>
+                Desks
+              </a>
+            </li> -->
+            <li class="nav-item">
+              <a class="nav-link" href="<?= './?show=admin&pages=user-all' ?>">
+                <span data-feather="users"></span>
+                Users
               </a>
             </li>
             <li class="nav-item">

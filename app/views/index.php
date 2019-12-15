@@ -5,7 +5,6 @@ use \app\models\Category as Category;
 
 $product = new Product($db->getConnection());
 $category = new Category($db->getConnection());
-var_dump($_SESSION);
 ?>
 <main role="main">
   <div class="container marketing mt-5">
@@ -23,6 +22,7 @@ var_dump($_SESSION);
                   <option value=''>All</option>
                   <?php
                   $result = $category->selectAll();
+                  $selected = "";
                   foreach ($result as $key => $value) {
                     if (isset($_GET['categories'])) {
                       if ($_GET['categories'] == $value['id']) {
@@ -47,31 +47,37 @@ var_dump($_SESSION);
           if (!empty($_GET['categories'])) {
             $id = filter_input(INPUT_GET, 'categories', FILTER_SANITIZE_NUMBER_INT);
             $result = $product->showByCategory($id);
-          } else if (isset($_GET['search'])) {
+          } else if (isset($_GET['q'])) {
             $query = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
             $result = $product->search($query);
           } else {
             $result = $product->selectAll();
           }
-          foreach ($result as $key => $row) {
-            ?>
-            <div class="col-md-4">
-              <div class="card mb-4 shadow-sm product-card">
-                <?php echo "<img src='./public/assets/images/" . $row['img_product'] . "' alt='" . $row['name'] . "' title='" . $row['name'] . "' style='width:100%;'/>"; ?>
-                <div class="card-body">
-                  <h3><a href='#'><?= $row['name']; ?></a></h3>
-                  <p class="card-text"><?php echo strlen($row['description']) > 40 ? substr($row['description'], 0, 40) . ".." : $row['description']; ?></p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <a data-id="<?= $row['id']; ?>" data-link="<?= BASEFILE; ?>" data-toggle="modal" data-target="#buyModal" name='buy_button' class="btn btn-lg btn-primary buy-product" style='cursor:pointer;color: white;'>View</a>
+          // var_dump($result);
+          if ($result) :
+            foreach ($result as $key => $row) :
+              $img_product = empty($row['img_product']) ? 'food_default.png' : $row['img_product'];
+              ?>
+              <div class="col-md-4">
+                <div class="card mb-4 shadow-sm product-card">
+                  <?php echo "<img src='./public/assets/images/" . $img_product . "' alt='" . $row['name'] . "' title='" . $row['name'] . "' style='width:100%;'/>"; ?>
+                  <div class="card-body">
+                    <h3><a href='#'><?= $row['name']; ?></a></h3>
+                    <p class="card-text"><?php echo strlen($row['description']) > 40 ? substr($row['description'], 0, 40) . ".." : $row['description']; ?></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="btn-group">
+                        <a data-id="<?= $row['id']; ?>" data-link="<?= BASEFILE; ?>" data-toggle="modal" data-target="#buyModal" name='buy_button' class="btn btn-lg btn-primary buy-product" style='cursor:pointer;color: white;'>View</a>
+                      </div>
+                      <small class="text-success">Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></small>
                     </div>
-                    <small class="text-success">Rp <?php echo number_format($row['price'], 0, ',', '.'); ?></small>
                   </div>
                 </div>
               </div>
-            </div>
           <?php
-          }
+            endforeach;
+          else :
+            echo "<p>Tidak ada data makanan!</p>";
+          endif;
           ?>
         </div>
       </div>
@@ -112,6 +118,7 @@ var_dump($_SESSION);
                       <input type='number' name='food-price-total' class='form-control food-price-total' min=0 readonly />
                       <label for="food-description" class="col-form-label">Notes</label>
                       <textarea name='food-description' class='form-control food-description'></textarea>
+                      <input type='hidden' name='status' value=0 class='food-status-stock' />
                     </div>
                   </div>
                 </div>

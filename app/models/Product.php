@@ -107,7 +107,7 @@ class Product
 
     public function update($id)
     {
-        if (isset($_FILES['img']) && !empty($_FILES['img'])) {
+        if (isset($_FILES['img']['tmp_name']) && !empty($_FILES['img']['tmp_name'])) {
             $query = "UPDATE products 
                     SET
                         name = :name,
@@ -157,7 +157,7 @@ class Product
         $statement->bindParam(':price', $price);
         $statement->bindParam(':stock', $stock);
 
-        if (isset($_FILES['img'])) {
+        if (isset($_FILES['img']['tmp_name'])) {
             $statement->bindParam(':img_product', $img_product);
         }
         $statement->bindParam(':description', $description);
@@ -188,9 +188,8 @@ class Product
 
     public function search($column)
     {
-        // $value = $this->filterString($_POST['search']);
-        $value = $column;
-        $query = "SELECT p.name, p.price, p.stock, p.status_product, c.name AS \"category_name\", p.img_product, p.description
+        $value = $this->filterString($column);
+        $query = "SELECT p.id, p.name, p.price, p.stock, p.status_product, c.name AS category_name, p.img_product, p.description
         FROM products p INNER JOIN categories c ON p.category_id=c.id WHERE p.name LIKE '%$value%' ORDER BY p.created_at DESC";
 
         $statement = $this->connect->prepare($query);

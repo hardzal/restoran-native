@@ -14,25 +14,25 @@ member_setia
   - [x] Product Add
   - [x] Product Update
   - [x] Product Delete
-  - [ ] Product Show
+  - [x] Product Show
   - [ ] Search Product
   - [x] Category Add
   - [x] Category Update
   - [x] Category Delete
   - [x] Show Product by Category
   - [ ] Search Category
-  - [ ] Order Show
-  - [ ] Order Add
+  - [x] Order Show
+  - [x] Order Add
   - [ ] Order Update
   - [ ] Order Delete
   - [ ] Payment Show
   - [ ] Payment Add
   - [ ] Payment Update
   - [ ] Payment Delete
-  - [ ] Desk Show
-  - [ ] Desk Update 
-  - [ ] Desk Delete
-  - [ ] Desk Add
+  - [x] Desk Show
+  - [x] Desk Update 
+  - [x] Desk Delete
+  - [x] Desk Add
   - [X] User Add
   - [X] User Update
   - [ ] User Show
@@ -42,12 +42,11 @@ member_setia
   - [ ] User Level Update
   - [ ] User Level Delete
   - [ ] User Level Search
-  - [ ] Report?
   - [ ] Export?
   - [ ] Import?
   
 - User Access 
-  - [ ] User Order 
+  - [x] User Order 
   - [ ] User Pay
   - [ ] User Profile Update
   - [ ] User View History   
